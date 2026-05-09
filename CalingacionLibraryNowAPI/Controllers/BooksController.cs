@@ -1,13 +1,9 @@
-﻿using CalingacionLibraryNowAPI.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Connections;
+using CalingacionLibraryNowAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
-namespace CalingacionLibraryNowAPI.Controlers
+namespace CalingacionLibraryNowAPI.Controllers
 {
-    [Route("api/v1/Books")]
+    [Route("api/v1/books")]
     [ApiController]
     public class BooksController : ControllerBase
     {
@@ -40,7 +36,7 @@ namespace CalingacionLibraryNowAPI.Controlers
             {
                 status = "success",
                 data = books,
-                message = "Books Retrieved"
+                message = "Books retrieved."
             });
         }
 
@@ -48,18 +44,22 @@ namespace CalingacionLibraryNowAPI.Controlers
         public IActionResult GetById(int id)
         {
             var book = books.FirstOrDefault(x => x.Id == id);
+
             if (book == null)
+            {
                 return NotFound(new
                 {
                     status = "error",
                     data = (object?)null,
-                    message = "Book not Found"
+                    message = "Book not found."
                 });
-            return NotFound(new
+            }
+
+            return Ok(new
             {
                 status = "success",
                 data = book,
-                message = "Book Retrieved"
+                message = "Book retrieved."
             });
         }
 
@@ -67,27 +67,35 @@ namespace CalingacionLibraryNowAPI.Controlers
         public IActionResult Create([FromBody] Books newBook)
         {
             newBook.Id = books.Count + 1;
+
             books.Add(newBook);
-            return CreatedAtAction(nameof(GetById),
+
+            return CreatedAtAction(
+                nameof(GetById),
                 new { id = newBook.Id },
-                new { status = "success" ,
-                data = newBook,
-                message = "Book Created."
+                new
+                {
+                    status = "success",
+                    data = newBook,
+                    message = "Book created."
                 });
         }
 
-        [HttpPut]
-    public IActionResult Update(int id,
-        [FromBody] Books updateBook)
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] Books updateBook)
         {
-            var book = books.FirstOrDefault(x =>x.Id == id);
+            var book = books.FirstOrDefault(x => x.Id == id);
+
             if (book == null)
+            {
                 return NotFound(new
                 {
                     status = "error",
                     data = (object?)null,
                     message = "Book not found."
                 });
+            }
+
             book.Title = updateBook.Title;
             book.Author = updateBook.Author;
             book.Genre = updateBook.Genre;
@@ -98,22 +106,27 @@ namespace CalingacionLibraryNowAPI.Controlers
             {
                 status = "success",
                 data = book,
-                message = "Book Updated."
+                message = "Book updated."
             });
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var book = books.FirstOrDefault(x => x.Id == id);
+
             if (book == null)
+            {
                 return NotFound(new
                 {
                     status = "error",
                     data = (object?)null,
                     message = "Book not found."
                 });
+            }
+
             books.Remove(book);
+
             return Ok(new
             {
                 status = "success",
