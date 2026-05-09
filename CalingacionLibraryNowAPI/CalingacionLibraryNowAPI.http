@@ -1,0 +1,6 @@
+@CalingacionLibraryNowAPI_HostAddress = http://localhost:5077
+
+GET {{CalingacionLibraryNowAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
