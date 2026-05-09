@@ -12,4 +12,4 @@ RUN dotnet publish "CalingacionLibraryNowAPI/CalingacionLibraryNowAPI.csproj" -c
 FROm base AS final
 WORKDIR /app
 COPY --from=build /app/out .
-ENTRYPOINT ["dotnet", "CalingacionLibraryNowAPI.dll"]s
+ENTRYPOINT ["dotnet", "CalingacionLibraryNowAPI.dll"]
